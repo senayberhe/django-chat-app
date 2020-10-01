@@ -1,0 +1,4 @@
+qanda/migrations
+user/migrations
+.vscode
+db.sqlite3
