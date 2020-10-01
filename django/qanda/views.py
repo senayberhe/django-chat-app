@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, DayArchiveView, RedirectView
+from django.views.generic import (
+    CreateView, DayArchiveView, RedirectView, 
+    DetailView, UpdateView,
+)
 
 from qanda.forms import QuestionForm, AnswerForm, AnswerAcceptanceForm
 from qanda.models import Question, Answer
@@ -8,7 +11,7 @@ from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from qanda.forms import AnswerForm, AnswerAcceptanceForm
 
 
-class AskQuestionView(LoginRequiredMixin):
+class AskQuestionView(LoginRequiredMixin, CreateView):
     form_class = QuestionForm
     template_name = 'qanda/ask.html'
 
@@ -16,9 +19,10 @@ class AskQuestionView(LoginRequiredMixin):
         return {
             'user': self.request.user.id
         }
-
+    
     def form_valid(self, form):
         action = self.request.POST.get('action')
+
         if action == 'SAVE':
             return super().form_valid(form)
         elif action == 'PREVIEW':
